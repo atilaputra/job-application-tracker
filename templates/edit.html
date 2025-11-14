@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Application - Job Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>✏️ Edit Application</h1>
+            <a href="{{ url_for('index') }}" class="back-link">← Back to Dashboard</a>
+        </header>
+
+        <div class="form-container">
+            <form method="POST" enctype="multipart/form-data" class="application-form">
+                <input type="hidden" name="current_resume" value="{{ application[7] or '' }}">
+                
+                <div class="form-group">
+                    <label for="company">Company Name *</label>
+                    <input type="text" id="company" name="company" required 
+                           value="{{ application[1] }}"
+                           placeholder="e.g., Google, Microsoft, Amazon">
+                </div>
+
+                <div class="form-group">
+                    <label for="role">Job Role *</label>
+                    <input type="text" id="role" name="role" required 
+                           value="{{ application[2] }}"
+                           placeholder="e.g., Software Engineer, Data Analyst">
+                </div>
+
+                <div class="form-group">
+                    <label for="job_link">Job Posting Link</label>
+                    <input type="url" id="job_link" name="job_link" 
+                           value="{{ application[3] or '' }}"
+                           placeholder="https://company.com/careers/job-id">
+                </div>
+
+                <div class="form-group">
+                    <label for="status">Application Status *</label>
+                    <select id="status" name="status" required>
+                        <option value="Applied" {% if application[4] == 'Applied' %}selected{% endif %}>Applied</option>
+                        <option value="Interview" {% if application[4] == 'Interview' %}selected{% endif %}>Interview</option>
+                        <option value="Offer" {% if application[4] == 'Offer' %}selected{% endif %}>Offer</option>
+                        <option value="Rejected" {% if application[4] == 'Rejected' %}selected{% endif %}>Rejected</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="date_applied">Date Applied *</label>
+                    <input type="date" id="date_applied" name="date_applied" required
+                           value="{{ application[6] }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="resume">Upload Resume</label>
+                    {% if application[7] %}
+                        <div class="current-file">
+                            <span class="file-indicator">📄 Current: {{ application[7] }}</span>
+                            <a href="{{ url_for('view_resume', filename=application[7]) }}" 
+                               target="_blank" 
+                               class="view-resume-btn">
+                                👁️ View Current Resume
+                            </a>
+                        </div>
+                    {% endif %}
+                    <input type="file" id="resume" name="resume" 
+                           accept=".pdf,.doc,.docx">
+                    <small class="form-hint">Upload a new file to replace the existing one</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Notes</label>
+                    <textarea id="notes" name="notes" rows="5" 
+                              placeholder="Add any notes about this application...">{{ application[5] or '' }}</textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">💾 Update Application</button>
+                    <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="metadata">
+            <small>Created: {{ application[8] }} | Last Updated: {{ application[9] }}</small>
+        </div>
+    </div>
+</body>
+</html>

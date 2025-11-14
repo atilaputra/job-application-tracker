@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Application - Job Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>➕ Add New Application</h1>
+            <a href="{{ url_for('index') }}" class="back-link">← Back to Dashboard</a>
+        </header>
+
+        <div class="form-container">
+            <form method="POST" enctype="multipart/form-data" class="application-form">
+                <div class="form-group">
+                    <label for="company">Company Name *</label>
+                    <input type="text" id="company" name="company" required 
+                           placeholder="e.g., Google, Microsoft, Amazon">
+                </div>
+
+                <div class="form-group">
+                    <label for="role">Job Role *</label>
+                    <input type="text" id="role" name="role" required 
+                           placeholder="e.g., Software Engineer, Data Analyst">
+                </div>
+
+                <div class="form-group">
+                    <label for="job_link">Job Posting Link</label>
+                    <input type="url" id="job_link" name="job_link" 
+                           placeholder="https://company.com/careers/job-id">
+                    <small class="form-hint">Paste the URL from LinkedIn, company career page, etc.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="status">Application Status *</label>
+                    <select id="status" name="status" required>
+                        <option value="Applied" selected>Applied</option>
+                        <option value="Interview">Interview</option>
+                        <option value="Offer">Offer</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="date_applied">Date Applied *</label>
+                    <input type="date" id="date_applied" name="date_applied" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="resume">Upload Resume (Optional)</label>
+                    <input type="file" id="resume" name="resume" 
+                           accept=".pdf,.doc,.docx">
+                    <small class="form-hint">Supported formats: PDF, DOC, DOCX (Max 10MB)</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Notes</label>
+                    <textarea id="notes" name="notes" rows="5" 
+                              placeholder="Add any notes about this application...
+- How you found this job
+- Referrals or contacts
+- Key requirements
+- Follow-up dates"></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">💾 Save Application</button>
+                    <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Set today's date as default
+        document.getElementById('date_applied').valueAsDate = new Date();
+    </script>
+</body>
+</html>
