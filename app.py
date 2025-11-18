@@ -8,10 +8,13 @@ app = Flask(__name__)
 app.secret_key = 'your-secret-key-change-this-in-production'
 
 # MySQL Configuration
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''  # Default XAMPP password is empty
-app.config['MYSQL_DB'] = 'job_tracker_db'
+import os
+
+# Use environment variables for Azure, fallback to localhost for local development
+app.config['MYSQL_HOST'] = os.environ.get('MYSQL_HOST', 'localhost')
+app.config['MYSQL_USER'] = os.environ.get('MYSQL_USER', 'root')
+app.config['MYSQL_PASSWORD'] = os.environ.get('MYSQL_PASSWORD', '')
+app.config['MYSQL_DB'] = os.environ.get('MYSQL_DB', 'job_tracker_db')
 
 # File upload configuration
 UPLOAD_FOLDER = 'uploads/resumes'
