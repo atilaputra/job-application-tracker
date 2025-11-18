@@ -16,6 +16,9 @@ app.config['MYSQL_USER'] = os.environ.get('MYSQL_USER', 'root')
 app.config['MYSQL_PASSWORD'] = os.environ.get('MYSQL_PASSWORD', '')
 app.config['MYSQL_DB'] = os.environ.get('MYSQL_DB', 'job_tracker_db')
 
+# SSL configuration for Azure MySQL
+app.config['MYSQL_SSL'] = {'ssl': {'required': True}}
+
 # File upload configuration
 UPLOAD_FOLDER = 'uploads/resumes'
 ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx'}
