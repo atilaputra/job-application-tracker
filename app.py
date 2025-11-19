@@ -1,9 +1,10 @@
+import pymysql
+import pymysql.cursors
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash
 from datetime import datetime
 import os
 from werkzeug.utils import secure_filename
-import pymysql
-import pymysql.cursors
+
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key-change-this-in-production'
