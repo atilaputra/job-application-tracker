@@ -130,7 +130,8 @@ def add_application():
 # Edit application
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit_application(id):
-    cur = mysql.connection.cursor()
+    conn = get_db_connection()
+    cur = conn.cursor()
     
     if request.method == 'POST':
         company = request.form['company']
@@ -156,8 +157,9 @@ def edit_application(id):
                 date_applied=%s, resume_path=%s, updated_at=NOW()
             WHERE id=%s
         """, (company, role, job_link, status, notes, date_applied, resume_path, id))
-        mysql.connection.commit()
+        conn.commit()
         cur.close()
+        conn.close()
         
         flash('Application updated successfully!', 'success')
         return redirect(url_for('index'))
@@ -165,16 +167,19 @@ def edit_application(id):
     cur.execute("SELECT * FROM applications WHERE id = %s", [id])
     application = cur.fetchone()
     cur.close()
+    conn.close()
     
     return render_template('edit.html', application=application)
 
 # Delete application
 @app.route('/delete/<int:id>')
 def delete_application(id):
-    cur = mysql.connection.cursor()
+    conn = get_db_connection()
+    cur = conn.cursor()
     cur.execute("DELETE FROM applications WHERE id = %s", [id])
-    mysql.connection.commit()
+    conn.commit()
     cur.close()
+    conn.close()
     
     flash('Application deleted successfully!', 'success')
     return redirect(url_for('index'))
@@ -182,11 +187,13 @@ def delete_application(id):
 # API endpoint for statistics (for future use)
 @app.route('/api/stats')
 def get_stats():
-    cur = mysql.connection.cursor()
+    conn = get_db_connection()
+    cur = conn.cursor()
     
     cur.execute("SELECT status, COUNT(*) as count FROM applications GROUP BY status")
     results = cur.fetchall()
     cur.close()
+    conn.close()
     
     stats = {row[0]: row[1] for row in results}
     return jsonify(stats)
