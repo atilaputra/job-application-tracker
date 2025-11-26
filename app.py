@@ -142,14 +142,19 @@ def edit_application(id):
         date_applied = request.form['date_applied']
         
         # Handle resume upload
-        resume_path = request.form.get('current_resume')
+        resume_path = None
         if 'resume' in request.files:
             file = request.files['resume']
             if file and file.filename != '' and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                filename = f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{filename}"
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                resume_path = filename
+                try:
+                    filename = secure_filename(file.filename)
+                    filename = f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{filename}"
+                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                    resume_path = filename
+                except Exception as e:
+                    print(f"Error saving file: {e}")
+                    # Continue without saving file
+                    pass
         
         cur.execute("""
             UPDATE applications 
