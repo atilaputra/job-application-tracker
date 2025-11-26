@@ -101,15 +101,20 @@ def add_application():
         date_applied = request.form['date_applied']
         
         # Handle resume upload
-        resume_path = None
-        if 'resume' in request.files:
-            file = request.files['resume']
-            if file and file.filename != '' and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                # Add timestamp to avoid conflicts
-                filename = f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{filename}"
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                resume_path = filename
+# Handle resume upload
+resume_path = None
+if 'resume' in request.files:
+    file = request.files['resume']
+    if file and file.filename != '' and allowed_file(file.filename):
+        try:
+            filename = secure_filename(file.filename)
+            filename = f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{filename}"
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            resume_path = filename
+        except Exception as e:
+            print(f"Error saving file: {e}")
+            # Continue without saving file
+            pass
         
         conn = get_db_connection()
         cur = conn.cursor()
